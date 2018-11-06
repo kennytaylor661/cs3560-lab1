@@ -1,0 +1,55 @@
+// CS3560 Lab #1 - Kenny Taylor 9/10/18
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    // Set the rule threshold here
+    const float threshold = 1.45;
+
+    float petalLength[100];
+    int plantSpecies[100];
+    int predictedSpecies[100];
+    int i, correct = 0;
+
+    // Read the file
+    string line;
+    ifstream input ("iris.csv", ifstream::in);
+    for (i = 0; i < 100; i++) {
+        getline(input, line, ',');    
+        petalLength[i] = atof(line.c_str());
+        getline(input, line);
+        plantSpecies[i] = atoi(line.c_str());
+    }
+
+    cout << "Read " << i << " lines from file" << endl << endl;
+    cout << "Evaluating ruleset:  if petal length < " << threshold << " then flower species 2" << endl << endl;
+
+    // Run the rule against each data row:  if petal length > 1.45,
+    // then assign label 2, else assign label 1
+    for (i = 0; i < 100; i++) {
+        if (petalLength[i] > threshold)
+            predictedSpecies[i] = 2;
+        else
+            predictedSpecies[i] = 1;
+    }
+
+    // For debug, print the list of petal lengths, actual species, and predicted species
+    //for (i = 0; i < 100; i++) {
+    //    cout << petalLength[i] << "    " << plantSpecies[i] << "    " << predictedSpecies[i] << endl;
+    //}
+
+    // Count the ratio of correct predictions
+    for (i = 0; i < 100; i++) {
+        if (plantSpecies[i] == predictedSpecies[i])
+            correct++;
+    }
+
+    // Print the correct percentage
+    cout << "The expert system rules predicted " << correct*100/100<< "% successfully" << endl;
+
+    return 0;
+}
